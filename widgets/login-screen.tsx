@@ -38,18 +38,28 @@ export default function LogInScreen() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isPending, setIsPending] = useState(false);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsPending(true);
-    if (values.password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
+  async function onSubmit({ password }: z.infer<typeof formSchema>) {
+    try {
+      setIsPending(true);
+      setErrorMessage("");
+
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+
+      if (!response.ok) throw new Error("Access denied!");
+
       localStorage.setItem("saved", "true");
       setIsAdmin(true);
-    } else {
+    } catch (error: any) {
       localStorage.removeItem("saved");
       setIsAdmin(false);
-      setErrorMessage("Access denied!");
+      setErrorMessage(error.message || "Access denied!");
+    } finally {
+      setIsPending(false);
     }
-
-    setIsPending(false);
   }
 
   return (
