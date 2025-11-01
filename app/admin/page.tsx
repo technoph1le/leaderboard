@@ -14,40 +14,27 @@ import {
 } from "@/components/ui/select";
 import { api } from "@/convex/_generated/api";
 import { GROUPS } from "@/lib/db";
+import { useAuth } from "@/providers/auth-provider";
 import LogInScreen from "@/widgets/login-screen";
 import StudentsTable from "@/widgets/students-table";
 import { useMutation } from "convex/react";
 import { LogOutIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function AdminPage() {
   const addStudent = useMutation(api.students.addStudent);
+  const { isAdmin } = useAuth();
+
   const [group, setGroup] = useState("");
   const [name, setName] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleAdd = async () => {
     await addStudent({ group, name });
   };
 
-  useEffect(() => {
-    const saved = localStorage.getItem("saved");
-
-    if (saved === "true") {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, []);
-
-  const handleLogOut = () => {
-    localStorage.removeItem("saved");
-    setIsLoggedIn(false);
-  };
-
   return (
     <>
-      {isLoggedIn ? (
+      {isAdmin ? (
         <section>
           <div className="wrapper">
             <Select onValueChange={setGroup}>
@@ -78,16 +65,10 @@ export default function AdminPage() {
               onChange={(e) => setName(e.target.value)}
             />
             <Button onClick={handleAdd}>Add</Button>
-
-            <div>
-              <Button variant="destructive" onClick={handleLogOut}>
-                <LogOutIcon /> Log out
-              </Button>
-            </div>
           </div>
         </section>
       ) : (
-        <LogInScreen setIsLoggedIn={setIsLoggedIn} />
+        <LogInScreen />
       )}
     </>
   );

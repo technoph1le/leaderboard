@@ -37,6 +37,9 @@ export default function StudentsTable({ group }: Props) {
       id: "actions",
       header: "Actions",
       cell: ({ row }) => {
+        const data = row.original;
+        console.log(data);
+
         return (
           <ButtonGroup>
             <Button>Edit</Button>

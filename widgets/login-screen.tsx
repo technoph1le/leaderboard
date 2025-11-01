@@ -17,8 +17,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/providers/auth-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -26,17 +27,14 @@ const formSchema = z.object({
   password: z.string(),
 });
 
-interface Props {
-  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
-}
-
-export default function LogInScreen({ setIsLoggedIn }: Props) {
+export default function LogInScreen() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       password: "",
     },
   });
+  const { setIsAdmin } = useAuth();
   const [errorMessage, setErrorMessage] = useState("");
   const [isPending, setIsPending] = useState(false);
 
@@ -44,10 +42,10 @@ export default function LogInScreen({ setIsLoggedIn }: Props) {
     setIsPending(true);
     if (values.password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
       localStorage.setItem("saved", "true");
-      setIsLoggedIn(true);
+      setIsAdmin(true);
     } else {
       localStorage.removeItem("saved");
-      setIsLoggedIn(false);
+      setIsAdmin(false);
       setErrorMessage("Access denied!");
     }
 
