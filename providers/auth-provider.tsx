@@ -6,7 +6,6 @@ import {
   ReactNode,
   useContext,
   useEffect,
-  useLayoutEffect,
   useState,
 } from "react";
 
@@ -22,7 +21,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const saved = localStorage.getItem("saved");
     if (saved === "true") {
       setIsAdmin(true);

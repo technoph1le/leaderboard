@@ -27,28 +27,34 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import z from "zod";
+import StudentForm, { StudentFormValues } from "@/widgets/student-form";
 
 export default function Groups() {
   const addStudent = useMutation(api.students.add);
 
-  const [group, setGroup] = useState("GA");
-  const [name, setName] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState("GA");
 
-  const handleAdd = async () => {
-    try {
-      await addStudent({ group, name });
-    } catch {
-      toast.error("Something went wrong!");
-    }
-  };
+  async function handleSubmit(formData: StudentFormValues) {
+    await addStudent({
+      name: formData.fullName,
+      group: formData.group,
+      score: formData.score,
+    });
+  }
 
   return (
     <>
       <div>
         <div className="flex gap-4 items-center justify-between">
-          <h1 className="text-2xl font-bold">List of students - {group}</h1>
+          <h1 className="text-2xl font-bold">
+            List of students - {selectedGroup}
+          </h1>
           <div className="flex gap-2 items-center">
-            <Select onValueChange={setGroup} defaultValue={group}>
+            <Select
+              onValueChange={setSelectedGroup}
+              defaultValue={selectedGroup}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a group" />
               </SelectTrigger>
@@ -72,19 +78,17 @@ export default function Groups() {
                     you&apos;re done.
                   </SheetDescription>
                 </SheetHeader>
-                <div className="grid flex-1 auto-rows-min gap-6 px-4">
-                  <div className="grid gap-3">
-                    <Label htmlFor="student">Full Name</Label>
-                    <Input
-                      type="text"
-                      id="student"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                  </div>
-                </div>
+                <StudentForm
+                  formId="add-student-form"
+                  defaultValues={{
+                    fullName: "",
+                    group: selectedGroup,
+                    score: 0,
+                  }}
+                  onSubmit={handleSubmit}
+                />
                 <SheetFooter>
-                  <Button type="submit" onClick={handleAdd}>
+                  <Button type="submit" form="add-student-form">
                     Save changes
                   </Button>
                   <SheetClose asChild>
@@ -97,7 +101,7 @@ export default function Groups() {
         </div>
 
         <div className="w-full my-8">
-          <StudentsTable group={group} />
+          <StudentsTable group={selectedGroup} />
         </div>
       </div>
     </>

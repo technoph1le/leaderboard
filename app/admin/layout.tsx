@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { useAuth } from "@/providers/auth-provider";
-import { AppSidebar } from "@/widgets/admin-sidebar";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/providers/auth-provider";
+import { Button } from "@/components/ui/button";
+import { AppSidebar } from "@/widgets/admin-sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();

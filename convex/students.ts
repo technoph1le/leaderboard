@@ -24,10 +24,10 @@ function generateStudentId(name: string, group: string) {
 }
 
 export const add = mutation({
-  args: { name: v.string(), group: v.string() },
-  handler: async (ctx, { name, group }) => {
+  args: { name: v.string(), group: v.string(), score: v.number() },
+  handler: async (ctx, { name, group, score }) => {
     const id = generateStudentId(name, group);
-    await ctx.db.insert("students", { id, name, group, score: 0 });
+    await ctx.db.insert("students", { id, name, group, score });
   },
 });
 
