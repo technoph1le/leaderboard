@@ -10,7 +10,7 @@ export default function GroupPage() {
 
   return (
     <section>
-      <div className="wrapper-sm space-y-8">
+      <div className="wrapper-sm space-y-8 py-8">
         <h2 className="text-4xl font-bold text-center">{group} Leaderboard</h2>
         <Leaderboard group={group} />
       </div>

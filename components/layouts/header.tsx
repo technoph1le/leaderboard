@@ -10,9 +10,9 @@ export default function Header() {
   const { isAdmin, logOut } = useAuth();
 
   return (
-    <header>
-      <div className="wrapper py-6 flex justify-between items-center gap-4">
-        <Link href="/" className="text-xl font-bold">
+    <header className="border-border border-b">
+      <div className="wrapper py-4 flex justify-between items-center gap-4">
+        <Link href="/" className="text-2xl font-bold">
           Al-Jabr
         </Link>
         <div className="flex gap-4">

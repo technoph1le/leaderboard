@@ -53,10 +53,10 @@ export default function LogInScreen() {
 
       localStorage.setItem("saved", "true");
       setIsAdmin(true);
-    } catch (error: any) {
+    } catch {
       localStorage.removeItem("saved");
       setIsAdmin(false);
-      setErrorMessage(error.message || "Access denied!");
+      setErrorMessage("Access denied!");
     } finally {
       setIsPending(false);
     }

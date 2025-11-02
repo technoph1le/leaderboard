@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
 import { DataTable } from "@/components/ui/data-table";
 import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
 import { GROUPS } from "@/lib/db";
 import { ColumnDef } from "@tanstack/react-table";
 import { useQuery } from "convex/react";
+
+import TableActions from "./table-actions";
 
 interface Props {
   group: (typeof GROUPS)[number];
@@ -18,16 +18,16 @@ export default function StudentsTable({ group }: Props) {
 
   const columns: ColumnDef<Doc<"students">>[] = [
     {
-      accessorKey: "id",
-      header: "ID",
-    },
-    {
       accessorKey: "group",
       header: "Group",
     },
     {
       accessorKey: "name",
-      header: "Name",
+      header: "Full Name",
+    },
+    {
+      accessorKey: "id",
+      header: "ID",
     },
     {
       accessorKey: "score",
@@ -38,15 +38,8 @@ export default function StudentsTable({ group }: Props) {
       header: "Actions",
       cell: ({ row }) => {
         const data = row.original;
-        console.log(data);
 
-        return (
-          <ButtonGroup>
-            <Button>Edit</Button>
-            <Button variant="outline">Score</Button>
-            <Button variant="destructive">Delete</Button>
-          </ButtonGroup>
-        );
+        return <TableActions data={data} />;
       },
     },
   ];

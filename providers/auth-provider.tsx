@@ -6,6 +6,7 @@ import {
   ReactNode,
   useContext,
   useEffect,
+  useLayoutEffect,
   useState,
 } from "react";
 
@@ -21,15 +22,18 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const saved = localStorage.getItem("saved");
-
     if (saved === "true") {
       setIsAdmin(true);
-    } else {
-      setIsAdmin(false);
     }
   }, []);
+
+  useEffect(() => {
+    if (isAdmin) {
+      router.push("/admin");
+    }
+  }, [isAdmin, router]);
 
   const logOut = () => {
     localStorage.removeItem("saved");
@@ -45,7 +49,10 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 }
 
 export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
-  return ctx;
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within a AuthProvider");
+  }
+
+  return context;
 }
