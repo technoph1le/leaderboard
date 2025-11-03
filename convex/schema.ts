@@ -7,5 +7,5 @@ export default defineSchema({
     group: v.string(),
     name: v.string(),
     score: v.number(),
-  }),
+  }).index("by_score", ["score"]),
 });

@@ -4,8 +4,9 @@ import { mutation, query } from "./_generated/server";
 export const getByGroup = query({
   args: { group: v.string() },
   handler: async (ctx, { group }) => {
-    return ctx.db
+    return await ctx.db
       .query("students")
+      .withIndex("by_score")
       .filter((q) => q.eq(q.field("group"), group))
       .order("desc")
       .collect();
@@ -24,10 +25,19 @@ function generateStudentId(name: string, group: string) {
 }
 
 export const add = mutation({
-  args: { name: v.string(), group: v.string(), score: v.number() },
+  args: {
+    name: v.string(),
+    group: v.string(),
+    score: v.number(),
+  },
   handler: async (ctx, { name, group, score }) => {
     const id = generateStudentId(name, group);
-    await ctx.db.insert("students", { id, name, group, score });
+    await ctx.db.insert("students", {
+      id,
+      name,
+      group,
+      score,
+    });
   },
 });
 
