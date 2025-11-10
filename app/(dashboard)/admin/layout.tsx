@@ -5,9 +5,16 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/auth-provider";
 import { Button } from "@/components/ui/button";
 import { AppSidebar } from "@/widgets/admin-sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import {
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const router = useRouter();
   const { isAdmin } = useAuth();
 
@@ -25,7 +32,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <AppSidebar />
         <main className="w-full">
           <section className="p-4 space-y-4">
-            <Button size="icon" variant="outline" asChild>
+            <Button
+              size="icon"
+              variant="outline"
+              hidden /* for testing */
+              asChild
+            >
               <SidebarTrigger />
             </Button>
             {children}

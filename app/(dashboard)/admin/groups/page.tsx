@@ -1,8 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -15,7 +13,6 @@ import { GROUPS } from "@/lib/db";
 import StudentsTable from "@/widgets/students-table";
 import { useMutation } from "convex/react";
 import { useState } from "react";
-import { toast } from "sonner";
 
 import {
   Sheet,
@@ -27,8 +24,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import z from "zod";
-import StudentForm, { StudentFormValues } from "@/widgets/student-form";
+import StudentForm, {
+  StudentFormValues,
+} from "@/widgets/student-form";
 
 export default function Groups() {
   const addStudent = useMutation(api.students.add);
@@ -68,14 +66,16 @@ export default function Groups() {
             </Select>
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline">Add new student</Button>
+                <Button variant="outline">
+                  Add new student
+                </Button>
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
                   <SheetTitle>Add a student</SheetTitle>
                   <SheetDescription>
-                    Add new students to the group here. Click save when
-                    you&apos;re done.
+                    Add new students to the group here.
+                    Click save when you&apos;re done.
                   </SheetDescription>
                 </SheetHeader>
                 <StudentForm
@@ -88,7 +88,10 @@ export default function Groups() {
                   onSubmit={handleSubmit}
                 />
                 <SheetFooter>
-                  <Button type="submit" form="add-student-form">
+                  <Button
+                    type="submit"
+                    form="add-student-form"
+                  >
                     Save changes
                   </Button>
                   <SheetClose asChild>
@@ -100,7 +103,7 @@ export default function Groups() {
           </div>
         </div>
 
-        <div className="w-full my-8">
+        <div className="w-full my-4">
           <StudentsTable group={selectedGroup} />
         </div>
       </div>

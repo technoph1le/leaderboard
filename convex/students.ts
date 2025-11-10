@@ -13,6 +13,32 @@ export const getByGroup = query({
   },
 });
 
+export const getAllStudents = query({
+  handler: async (ctx) => {
+    return await ctx.db
+      .query("students")
+      .withIndex("by_score")
+      .order("desc")
+      .take(30);
+  },
+});
+
+export const getTotalScoresByGroup = query({
+  handler: async (ctx) => {
+    const students = await ctx.db
+      .query("students")
+      .withIndex("by_score")
+      .collect();
+
+    const totals: Record<string, number> = {};
+
+    for (const { group, score } of students) {
+      totals[group] = (totals[group] || 0) + score;
+    }
+    return totals;
+  },
+});
+
 /**
  * Generate random student ID (e.g. GAALINOR37).
  */

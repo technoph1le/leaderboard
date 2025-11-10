@@ -1,7 +1,3 @@
-"use client";
-
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
 import {
   Table,
   TableBody,
@@ -22,26 +18,38 @@ import {
 import { UserSearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Doc } from "@/convex/_generated/dataModel";
 
 interface Props {
-  group: string;
+  students: Doc<"students">[];
+  isGroupVisible?: boolean;
 }
 
-export default function Leaderboard({ group }: Props) {
-  const students = useQuery(api.students.getByGroup, { group });
-
-  if (!students) return null;
-
+export default function Leaderboard({
+  students,
+  isGroupVisible = false,
+}: Props) {
   return (
     <div className="max-w-xl mx-auto overflow-hidden rounded-md border bg-background">
       {students.length > 0 ? (
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
-              <TableHead className="w-16 p-4">No.</TableHead>
-              <TableHead className="p-4">Full Name</TableHead>
-              <TableHead className="p-4">Student ID</TableHead>
-              <TableHead className="text-right p-4">Score</TableHead>
+              <TableHead className="w-16 p-4">
+                No.
+              </TableHead>
+              {isGroupVisible && (
+                <TableHead className="p-4">Group</TableHead>
+              )}
+              <TableHead className="p-4">
+                Full Name
+              </TableHead>
+              <TableHead className="p-4">
+                Student ID
+              </TableHead>
+              <TableHead className="text-right p-4">
+                Score
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -50,8 +58,17 @@ export default function Leaderboard({ group }: Props) {
                 <TableCell className="p-4 font-bold bg-accent">
                   {index + 1}
                 </TableCell>
-                <TableCell className="p-4 ">{student.name}</TableCell>
-                <TableCell className="p-4">{student.id}</TableCell>
+                {isGroupVisible && (
+                  <TableCell className="p-4">
+                    {student.group}
+                  </TableCell>
+                )}
+                <TableCell className="p-4 ">
+                  {student.name}
+                </TableCell>
+                <TableCell className="p-4">
+                  {student.id}
+                </TableCell>
                 <TableCell className="text-right p-4">
                   {student.score}
                 </TableCell>
@@ -66,7 +83,9 @@ export default function Leaderboard({ group }: Props) {
               <UserSearchIcon />
             </EmptyMedia>
             <EmptyTitle>No data</EmptyTitle>
-            <EmptyDescription>No students found</EmptyDescription>
+            <EmptyDescription>
+              No students found
+            </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
             <Button asChild>

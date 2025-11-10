@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   createContext,
   ReactNode,
@@ -15,9 +15,16 @@ type AuthContextType = {
   logOut: () => void;
 };
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<AuthContextType | null>(
+  null
+);
 
-export default function AuthProvider({ children }: { children: ReactNode }) {
+export default function AuthProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const pathname = usePathname();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -29,7 +36,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (isAdmin) {
+    if (isAdmin && pathname === "/auth") {
       router.push("/admin");
     }
   }, [isAdmin, router]);
@@ -41,7 +48,9 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isAdmin, setIsAdmin, logOut }}>
+    <AuthContext.Provider
+      value={{ isAdmin, setIsAdmin, logOut }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -50,7 +59,9 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within a AuthProvider");
+    throw new Error(
+      "useAuth must be used within a AuthProvider"
+    );
   }
 
   return context;
