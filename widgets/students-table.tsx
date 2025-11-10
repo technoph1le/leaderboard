@@ -14,12 +14,18 @@ interface Props {
 }
 
 export default function StudentsTable({ group }: Props) {
-  const students = useQuery(api.students.getByGroup, { group });
+  const students = useQuery(api.students.getByGroup, {
+    group,
+  });
 
   const columns: ColumnDef<Doc<"students">>[] = [
     {
-      accessorKey: "group",
-      header: "Group",
+      header: "No.",
+      cell: ({ row }) => {
+        const placement = row.index + 1;
+
+        return <span>{placement}</span>;
+      },
     },
     {
       accessorKey: "name",
@@ -46,5 +52,10 @@ export default function StudentsTable({ group }: Props) {
 
   if (!students) return null;
 
-  return <DataTable columns={columns} data={students as Doc<"students">[]} />;
+  return (
+    <DataTable
+      columns={columns}
+      data={students as Doc<"students">[]}
+    />
+  );
 }
